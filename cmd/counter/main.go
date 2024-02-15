@@ -42,7 +42,7 @@ func (c *Counter) takeOrder(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (c *Counter) handleOrder(w http>responseWriter,r *http.Request) {
+func (c *Counter) handleOrder(w http.responseWriter,r *http.Request) {
 	amount := r.URL.Query().Get("amount")
 	if amount == "" {
 		http.Error(w, "Missing amount", http.StatusBadRequest)
