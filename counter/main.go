@@ -9,9 +9,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/e1ehpark/go-kafka-event/event"
-
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
+	"github.com/e1ehpark/go-kafka-event/event"
 )
 
 type Counter struct {
@@ -43,7 +42,7 @@ func (c *Counter) takeOrder(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (c *Counter) handleOrder(w http.responseWriter, r *http.Request) {
+func (c *Counter) handleOrder(w http.ResponseWriter, r *http.Request) {
 	amount := r.URL.Query().Get("amount")
 	if amount == "" {
 		http.Error(w, "Missing amount", http.StatusBadRequest)
@@ -69,7 +68,7 @@ func (c *Counter) handleOrder(w http.responseWriter, r *http.Request) {
 		return
 	}
 
-	err = c.producer.Produce(&kafka.Message{
+	err = c.Producer.Produce(&kafka.Message{
 		TopicPartition: kafka.TopicPartition{
 			Topic:     &event.OrderProcessedTopic,
 			Partition: kafka.PartitionAny,
