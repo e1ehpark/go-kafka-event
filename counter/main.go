@@ -16,13 +16,13 @@ import (
 
 type Counter struct {
 	*http.Server
-	producer     *kafka.Producer
+	Producer     *kafka.Producer
 	deliveryChan chan kafka.Event
 }
 
-func NewCounter(addr string, producer *kafka.Producer) *Counter {
+func NewCounter(addr string, Producer *kafka.Producer) *Counter {
 	c := &Counter{
-		producer:     producer,
+		Producer:     Producer,
 		deliveryChan: make(chan kafka.Event),
 	}
 
