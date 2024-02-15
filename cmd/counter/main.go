@@ -106,7 +106,7 @@ func main() {
 
 	log.Println("Counter is ready to take orders.")
 
-	stopChan := make(chan struct())
+	stopChan := make(chan struct{})
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, os.Interrupt)
 
