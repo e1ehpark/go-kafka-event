@@ -25,7 +25,7 @@ func (os OrderStatus) String() string {
 	}[os]
 }
 
-type OrderEvent struct {
+type Order struct {
 	OrderID string      `json:"order_id"`
 	Amount  int         `json:"amount"`
 	Status  OrderStatus `json:"status"`
