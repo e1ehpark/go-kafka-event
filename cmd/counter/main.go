@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/e1ehpark/go-kafka-event/event"
 	"context"
 	"log"
 	"net/http"
@@ -10,24 +9,26 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/e1ehpark/go-kafka-event/event"
+
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 )
 
 type Counter struct {
 	*http.Server
-	producer    *kafka.Producer
+	producer     *kafka.Producer
 	deliveryChan chan kafka.Event
 }
 
 func NewCounter(addr string, producer *kafka.Producer) *Counter {
 	c := &Counter{
-		producer: producer,
+		producer:     producer,
 		deliveryChan: make(chan kafka.Event),
 	}
 
 	c.Server = &http.Server{
-		Addr:         addr,
-		Handler:      http.HandlerFunc(c.takeOrder),
+		Addr:    addr,
+		Handler: http.HandlerFunc(c.takeOrder),
 	}
 
 	return c
@@ -36,13 +37,13 @@ func NewCounter(addr string, producer *kafka.Producer) *Counter {
 func (c *Counter) takeOrder(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodPost:
-		 c.handleOrder(w, r)
+		c.handleOrder(w, r)
 	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 }
 
-func (c *Counter) handleOrder(w http.responseWriter,r *http.Request) {
+func (c *Counter) handleOrder(w http.responseWriter, r *http.Request) {
 	amount := r.URL.Query().Get("amount")
 	if amount == "" {
 		http.Error(w, "Missing amount", http.StatusBadRequest)
@@ -70,11 +71,11 @@ func (c *Counter) handleOrder(w http.responseWriter,r *http.Request) {
 
 	err = c.producer.Produce(&kafka.Message{
 		TopicPartition: kafka.TopicPartition{
-			Topic: &event.OrderProcessedTopic,
-		Partition: kafka.PartitionAny,
+			Topic:     &event.OrderProcessedTopic,
+			Partition: kafka.PartitionAny,
 		},
-		Key:  []byte(order.OrderID),
-		Value:          val,
+		Key:   []byte(order.OrderID),
+		Value: val,
 	}, c.deliveryChan)
 	if err != nil {
 		http.Error(w, "Failed to produce order", http.StatusInternalServerError)
@@ -88,11 +89,11 @@ func (c *Counter) handleOrder(w http.responseWriter,r *http.Request) {
 		http.Error(w, "Failed to deliver order", http.StatusInternalServerError)
 		return
 	} else {
-		log.Printf(w, "Produced message to popic %s [%d] at offset %v\n", 
+		log.Printf(w, "Produced message to popic %s [%d] at offset %v\n",
 			*m.TopicPartition.Topic, m.TopicPartition.Partition, m.TopicPartition.Offset)
-			w.WriteHeader(http.StatusCreated)
-			w.Headerr().Add("Content-Type", "application/json")
-			w.Write(val)
+		w.WriteHeader(http.StatusCreated)
+		w.Headerr().Add("Content-Type", "application/json")
+		w.Write(val)
 	}
 }
 
@@ -120,12 +121,12 @@ func main() {
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
 
-		_= counter.Shutdown(ctx)
-	}
+		_ = counter.Shutdown(ctx)
+	}()
 
 	log.Println("Starting counter...")
 
-	err = counter.ListenAndServe()
+	var err = counter.ListenAndServe()
 	if err != nil && err != http.ErrServerClosed {
 		panic(err)
 	}
@@ -134,6 +135,3 @@ func main() {
 
 	log.Println("Counter is shutting down")
 }
-
-
-
