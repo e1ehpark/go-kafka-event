@@ -3,7 +3,7 @@ package event
 import (
 	"encoding/json"
 
-	"github.com/goole/uuid"
+	"github.com/google/uuid"
 )
 
 var (
