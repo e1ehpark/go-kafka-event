@@ -17,4 +17,3 @@ runall:
 installs:
 	go get github.com/confluentinc/confluent-kafka-go/v2/kafka
 	go get github.com/google/uuid
-	go get github.com/e1ehpark/go-kafka-event/event
