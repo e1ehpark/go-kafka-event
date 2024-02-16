@@ -6,7 +6,7 @@ import (
 	"os/signal"
 	"time"
 
-	"go-kafka-event/event"
+	"github.com/e1ehpark/go-kafka-event/event"
 
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 )
