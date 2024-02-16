@@ -7,7 +7,7 @@ runclient:
 runevent:
 	go run .\event
 
-runorder:
+runbarista:
 	go run .\order
 
 runall:
