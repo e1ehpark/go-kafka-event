@@ -1,4 +1,4 @@
-module github.com/e1ehpark/go-kafka-event
+module go-kafka-event
 
 go 1.22.0
 
