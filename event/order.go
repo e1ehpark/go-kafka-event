@@ -39,7 +39,7 @@ func NewOrder(amount int) Order {
 	}
 }
 
-func (o *Order) UnmarshalBinary() ([]byte, error) {
+func (o *Order) MarshalBinary() ([]byte, error) {
 	return json.Marshal(o)
 }
 
